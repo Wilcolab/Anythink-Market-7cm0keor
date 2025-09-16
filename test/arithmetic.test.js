@@ -147,6 +147,40 @@ describe('Arithmetic', function () {
         });
     });
 
+    describe('Logarithm', function () {
+        it('computes the natural log of a positive number', function (done) {
+            request.get('/arithmetic?operation=log&operand1=1')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: 0 });
+                    done();
+                });
+        });
+        it('computes the natural log of e', function (done) {
+            request.get('/arithmetic?operation=log&operand1=2.718281828459045')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body.result).to.be.closeTo(1, 1e-9);
+                    done();
+                });
+        });
+        it('returns null for log of zero', function (done) {
+            request.get('/arithmetic?operation=log&operand1=0')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: null });
+                    done();
+                });
+        });
+        it('returns null for log of negative number', function (done) {
+            request.get('/arithmetic?operation=log&operand1=-1')
+                .expect(200)
+                .end(function (err, res) {
+                    expect(res.body).to.eql({ result: null });
+                    done();
+                });
+        });
+    });
     describe('Division', function () {
         it('divides a positive integer by an integer factor ', function (done) {
             request.get('/arithmetic?operation=divide&operand1=42&operand2=2')
