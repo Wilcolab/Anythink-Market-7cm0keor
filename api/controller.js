@@ -12,11 +12,12 @@ exports.calculate = function(req, res) {
 
   // TODO: Add operator
   var operations = {
-    'add':      function(a, b) { return Number(a) + Number(b) },
-    'subtract': function(a, b) { return a - b },
-    'multiply': function(a, b) { return a * b },
-    'divide':   function(a, b) { return a / b },
-    'power':    function(a, b) { return Math.pow(a, b) }
+  'add':      function(a, b) { return Number(a) + Number(b) },
+  'subtract': function(a, b) { return a - b },
+  'multiply': function(a, b) { return a * b },
+  'divide':   function(a, b) { return a / b },
+  'power':    function(a, b) { return Math.pow(a, b) },
+  'log':      function(a)    { return Math.log(a) }
   };
 
   if (!req.query.operation) {
@@ -33,6 +34,16 @@ exports.calculate = function(req, res) {
       !req.query.operand1.match(/^(-)?[0-9\.]+(e(-)?[0-9]+)?$/) ||
       req.query.operand1.replace(/[-0-9e]/g, '').length > 1) {
     throw new Error("Invalid operand1: " + req.query.operand1);
+  }
+
+  // Special handling for log operation (unary)
+  if (req.query.operation === 'log') {
+    const value = Number(req.query.operand1);
+    // log(0) or log(negative) is not defined, return null
+    if (value <= 0) {
+      return res.json({ result: null });
+    }
+    return res.json({ result: operation(value) });
   }
 
   if (!req.query.operand2 ||

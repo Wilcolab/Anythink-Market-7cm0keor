@@ -19,27 +19,40 @@ var operation = null;
 function calculate(operand1, operand2, operation) {
     var uri = location.origin + "/arithmetic";
 
-    // TODO: Add operator
     switch (operation) {
         case '+':
             uri += "?operation=add";
+            uri += "&operand1=" + encodeURIComponent(operand1);
+            uri += "&operand2=" + encodeURIComponent(operand2);
             break;
         case '-':
             uri += "?operation=subtract";
+            uri += "&operand1=" + encodeURIComponent(operand1);
+            uri += "&operand2=" + encodeURIComponent(operand2);
             break;
         case '*':
             uri += "?operation=multiply";
+            uri += "&operand1=" + encodeURIComponent(operand1);
+            uri += "&operand2=" + encodeURIComponent(operand2);
             break;
         case '/':
             uri += "?operation=divide";
+            uri += "&operand1=" + encodeURIComponent(operand1);
+            uri += "&operand2=" + encodeURIComponent(operand2);
+            break;
+        case '^':
+            uri += "?operation=power";
+            uri += "&operand1=" + encodeURIComponent(operand1);
+            uri += "&operand2=" + encodeURIComponent(operand2);
+            break;
+        case 'log':
+            uri += "?operation=log";
+            uri += "&operand1=" + encodeURIComponent(operand1);
             break;
         default:
             setError();
             return;
     }
-
-    uri += "&operand1=" + encodeURIComponent(operand1);
-    uri += "&operand2=" + encodeURIComponent(operand2);
 
     setLoading(true);
 
@@ -56,6 +69,13 @@ function calculate(operand1, operand2, operation) {
         }
     };
     http.send(null);
+}
+// Handle log button press
+function logPressed() {
+    operand1 = getValue();
+    operation = 'log';
+    state = states.complete;
+    calculate(operand1, null, operation);
 }
 
 function clearPressed() {
